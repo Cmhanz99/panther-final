@@ -204,7 +204,7 @@
                             <p class="distance-text" id="popupDistance">0.3 miles away</p>
                             <button class="btn-secondary small">View</button>
                         </div>
-                    </div>  
+                    </div>
                 </div>
 
                 <div class="map-controls" style="padding: 20px;">
@@ -254,7 +254,7 @@
                         </div>
                     </div>
                 </div>
-
+<!--This is a comment-->
                 <div class="notification-settings">
                     <h3>Customize Your Notifications</h3>
                     <p>Choose when and how you receive alerts about nearby properties</p>
