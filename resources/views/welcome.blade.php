@@ -172,25 +172,6 @@
                             <i class="fas fa-user-circle"></i>
                         </div>
 
-                        <!-- Property Markers -->
-                        <div class="property-marker" style="top: 45%; left: 48%;">
-                            <div class="marker residential">
-                                <span>$450K</span>
-                            </div>
-                        </div>
-
-                        <div class="property-marker" style="top: 38%; left: 55%;">
-                            <div class="marker residential">
-                                <span>$685K</span>
-                            </div>
-                        </div>
-
-                        <div class="property-marker" style="top: 52%; left: 60%;">
-                            <div class="marker commercial">
-                                <span>$1.2M</span>
-                            </div>
-                        </div>
-
                         <!-- Distance Circles -->
                         <div class="distance-circle" data-miles="1"></div>
                         <div class="distance-circle" data-miles="3"></div>

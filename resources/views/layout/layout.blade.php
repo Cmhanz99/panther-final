@@ -18,6 +18,8 @@
 
     <!-- Include the geolocation script -->
     <script src="{{ asset('js/geolocation.js') }}"></script>
+    <script src="{{ asset('js/useFilter.js') }}"></script>
+    <script src="{{ asset('js/zoom.js') }}"></script>
 </body>
 
 </html>
