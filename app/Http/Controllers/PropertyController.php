@@ -12,4 +12,13 @@ class PropertyController extends Controller
         $properties = Property::all();
         return view('welcome', compact('properties'));
     }
+    public function radar()
+    {
+        // Check if user is logged in
+
+        // Get properties from database
+        $properties = Property::all();
+
+        return view('radar', compact('properties'));
+    }
 }

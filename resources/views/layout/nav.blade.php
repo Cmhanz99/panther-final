@@ -1,7 +1,7 @@
 <header>
     <div class="container">
         <div class="logo">
-            <h1>Property<span>Finder</span></h1>
+            <h1 style="color:red; font-family: Times New Roman; margin-right: 10px;">Prop<span style="color:blue;">Hunt</span></h1>
         </div>
         <nav>
             <ul>

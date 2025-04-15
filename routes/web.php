@@ -18,4 +18,6 @@ Route::get('/pages', [UserControl::class, 'pagest']);
 
 Route::get('/', [PropertyController::class, 'index']);
 
+Route::get('/radar', [PropertyController::class, 'radar'])->name('radar');
+
 

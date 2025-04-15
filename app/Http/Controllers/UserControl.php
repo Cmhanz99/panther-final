@@ -18,7 +18,7 @@ class UserControl extends Controller
         ]);
 
         if($request->name == $user['name'] && $request->password == $user['password']){
-            return redirect('/');  // Removed the with() message
+            return redirect('/radar');  // Removed the with() message
         } else {
             return back()->withErrors(['error' => 'Invalid credentials']);
         }
