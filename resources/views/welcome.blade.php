@@ -77,22 +77,28 @@
                     </div>
                 </div>
             </div>
-
             <div class="property-grid">
                 <!-- Property Card 1 -->
+                @foreach($properties as $property)
                 <div class="property-card">
                     <div class="property-image">
-                        <img src="{{ asset('images/apartment1.jpg') }}" alt="Modern Downtown Apartment">
+                        <img src="{{ asset($property->image) }}" alt="{{ $property->name }}">
                         <span class="distance"><i class="fas fa-location-arrow"></i> 0.3 miles away</span>
                         <button class="favorite"><i class="far fa-heart"></i></button>
                     </div>
                     <div class="property-details">
-                        <div class="price">₱450,000</div>
-                        <h3>Sugbo Apartment</h3>
+                        <div class="price">{{ $property->price }}</div>
+                        <h3>{{ $property->name }}</h3>
                         <p class="address">Lahug Cebu City</p>
                         <div class="features">
-                            <span><i class="fas fa-bed"></i> 2 bed</span>
-                            <span><i class="fas fa-bath"></i> 2 bath</span>
+                            @php
+                                // Parse the details string to extract bed, bath, and sqft
+                                $detailsParts = explode(',', $property->details);
+                                $beds = trim(explode(' ', $detailsParts[0] ?? '0 bed')[0]);
+                                $baths = isset($detailsParts[1]) ? trim(explode(' ', $detailsParts[1])[0]) : '0';
+                            @endphp
+                            <span><i class="fas fa-bed"></i> {{ $beds }} bed</span>
+                            <span><i class="fas fa-bath"></i> {{ $baths }} bath</span>
                             <span><i class="fas fa-ruler-combined"></i> 1,250 sqft</span>
                         </div>
                         <div class="property-footer">
@@ -101,52 +107,7 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Property Card 2 -->
-                <div class="property-card">
-                    <div class="property-image">
-                        <img src="{{ asset('images/condo.jpg') }}" alt="Luxury Condo with Views">
-                        <span class="distance"><i class="fas fa-location-arrow"></i> 0.8 miles away</span>
-                        <button class="favorite"><i class="far fa-heart"></i></button>
-                    </div>
-                    <div class="property-details">
-                        <div class="price">₱685,000</div>
-                        <h3>Condo IT Park</h3>
-                        <p class="address">Salinas Drive IT Park Cebu</p>
-                        <div class="features">
-                            <span><i class="fas fa-bed"></i> 3 bed</span>
-                            <span><i class="fas fa-bath"></i> 2 bath</span>
-                            <span><i class="fas fa-ruler-combined"></i> 1,850 sqft</span>
-                        </div>
-                        <div class="property-footer">
-                            <button class="btn-secondary">View Details</button>
-                            <span class="time-to-reach"><i class="fas fa-bicycle"></i> 4 min</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Property Card 3 -->
-                <div class="property-card">
-                    <div class="property-image">
-                        <img src="{{ asset('images/bedspace.jpg') }}" alt="Contemporary Townhouse">
-                        <span class="distance"><i class="fas fa-location-arrow"></i> 1.2 miles away</span>
-                        <button class="favorite"><i class="far fa-heart"></i></button>
-                    </div>
-                    <div class="property-details">
-                        <div class="price">₱10,000</div>
-                        <h3>Bed Spaces</h3>
-                        <p class="address">LaGuardia Lahug Cebu City</p>
-                        <div class="features">
-                            <span><i class="fas fa-bed"></i> 1 bed</span>
-                            <span><i class="fas fa-bath"></i> 1 bath</span>
-                            <span><i class="fas fa-ruler-combined"></i> 20 sqft</span>
-                        </div>
-                        <div class="property-footer">
-                            <button class="btn-secondary">View Details</button>
-                            <span class="time-to-reach"><i class="fas fa-car"></i> 3 min</span>
-                        </div>
-                    </div>
-                </div>
+            @endforeach
             </div>
 
             <div class="center-button">
@@ -482,6 +443,8 @@
             </div>
         </div>
     </footer>
-
-    <!-- JavaScript -->
 @endsection
+<script>
+    // Pass the PHP properties to JavaScript
+    window.propertyList = @json($properties);
+</script>

@@ -1649,3 +1649,86 @@ footer {
     margin-bottom: 15px;
     opacity: 0.9;
 }
+
+/* Mobile View Controls */
+.mobile-view-controls {
+    display: none;
+    margin-bottom: 15px;
+}
+
+.view-toggle {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.grid-toggle-btn {
+    background: #f5f5f5;
+    border: 1px solid #ddd;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.grid-toggle-btn:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: none;
+}
+
+.grid-toggle-btn:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.grid-toggle-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.grid-toggle-btn i {
+    font-size: 16px;
+}
+
+/* List view styling */
+.property-grid.list-view {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.list-view .property-card {
+    max-width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.list-view .property-image {
+    width: 120px;
+    min-width: 120px;
+    height: 120px;
+}
+
+.list-view .property-details {
+    flex: 1;
+}
+
+.list-view .property-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Only show toggle controls on mobile */
+@media (max-width: 768px) {
+    .mobile-view-controls {
+        display: block;
+    }
+
+    .property-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .property-grid.grid-view {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+}

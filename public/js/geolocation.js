@@ -33,32 +33,32 @@ const mapSettings = {
 
 // ====== PROPERTY DATABASE ======
 // List of properties to show on the map
-const propertyList = [
-    {
-        name: "Sugbo Apartment",
-        latitude: 10.315366,
-        longitude: 123.918746,
-        image: "/images/apartment1.jpg",
-        price: "$450,000",
-        details: "2 bed, 2 bath",
-    },
-    {
-        name: "Condo IT Park",
-        latitude: 10.3153,
-        longitude: 123.918,
-        image: "images/condo.jpg",
-        price: "$685,000",
-        details: "3 bed, 2 bath",
-    },
-    {
-        name: "Bed Spaces",
-        latitude: 10.3175,
-        longitude: 123.917,
-        image: "images/bedspace.jpg",
-        price: "$10,000",
-        details: "1 bed, 1 bath",
-    },
-];
+// const propertyList = [
+//     {
+//         name: "Sugbo Apartment",
+//         latitude: 10.315366,
+//         longitude: 123.918746,
+//         image: "/images/apartment1.jpg",
+//         price: "$450,000",
+//         details: "2 bed, 2 bath",
+//     },
+//     {
+//         name: "Condo IT Park",
+//         latitude: 10.3153,
+//         longitude: 123.918,
+//         image: "images/condo.jpg",
+//         price: "$685,000",
+//         details: "3 bed, 2 bath",
+//     },
+//     {
+//         name: "Bed Spaces",
+//         latitude: 10.3175,
+//         longitude: 123.917,
+//         image: "images/bedspace.jpg",
+//         price: "$10,000",
+//         details: "1 bed, 1 bath",
+//     },
+// ];
 
 // ====== HELPER FUNCTIONS ======
 
@@ -806,34 +806,19 @@ function startWatchingLocation() {
 function initializeMap() {
     debugLog("Map initialization started");
 
-    // Create property markers on the map
-    createPropertyMarkers();
-
-    // Create debug panel if in debug mode
-    if (mapSettings.showDebugInfo) {
-        createDebugPanel();
-    }
-
-    // Set initial position based on mode
-    if (mapSettings.useTestMode) {
-        // Use test location
-        updateUserMarker(
-            mapSettings.testLocation.latitude,
-            mapSettings.testLocation.longitude
-        );
-
-        // Check for nearby properties
-        checkNearbyProperties(
-            mapSettings.testLocation.latitude,
-            mapSettings.testLocation.longitude
-        );
+    // Use the property list from the window object (if available)
+    if (window.propertyList && Array.isArray(window.propertyList)) {
+        debugLog("Using property list from database");
+        propertyList = window.propertyList;
     } else {
-        // Center the user marker until we get real location
-        centerUserMarker();
-
-        // Start watching for real location
-        startWatchingLocation();
+        debugLog("No property list found in window object, using default");
+        // Keep your original propertyList as a fallback
     }
+
+    // Rest of your initialization code...
+    createPropertyMarkers();
+    // ...
+}
 
     // Add click handler to close popup when clicking on map
     const mapPlaceholder = document.querySelector(".map-placeholder");
@@ -968,7 +953,6 @@ function initializeMap() {
     addDebugStyles();
 
     debugLog("Map initialization complete");
-}
 
 /**
  * Adds CSS styles for the debug panel and buttons

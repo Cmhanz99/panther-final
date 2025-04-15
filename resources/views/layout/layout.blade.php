@@ -19,6 +19,11 @@
     <script src="{{asset ('js/geolocation.js')}}"></script>
     <script src="{{asset ('js/userFilter.js')}}"></script>
     <script src="{{asset ('js/zoom.js')}}"></script>
+    <script src="{{asset ('js/gridToggle.js')}}"></script> 
+    <script>
+        // Any general, app-wide JavaScript can go here
+        console.log("PropertyFinder application initialized");
+    </script>
 </body>
 
 </html>

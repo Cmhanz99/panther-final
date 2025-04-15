@@ -12,11 +12,30 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->id('user_id');  // Changed from id() to id('user_id')
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+             // Owner/Real Estate Basic Info
+             $table->string('business_name', 100)->nullable();
+             $table->string('phone', 20)->nullable();
+             $table->text('address')->nullable();
+             $table->string('verification_status', 20)->default('pending'); // pending, verified, rejected
+             $table->date('verification_date')->nullable();
+
+             // Additional Owner/Agent Info
+             $table->string('license_number')->nullable();
+             $table->string('agency_affiliation')->nullable();
+             $table->date('license_expiry')->nullable();
+             $table->string('gov_id_type')->nullable(); // e.g., Passport, Driver’s License
+             $table->string('gov_id_number')->nullable();
+             $table->string('profile_photo')->nullable(); // path to uploaded image
+             $table->string('id_document')->nullable();   // path to uploaded ID document
+
+
             $table->rememberToken();
             $table->timestamps();
         });
