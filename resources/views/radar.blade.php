@@ -49,6 +49,7 @@
         </div>
     </div>
 </section>
+<a href="/" class="logout-radar">Logout</a>
 @endsection
 <script>
     // Pass the PHP properties to JavaScript

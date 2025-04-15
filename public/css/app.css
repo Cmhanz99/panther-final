@@ -1732,3 +1732,15 @@ footer {
         grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     }
 }
+
+.logout-radar
+{
+    padding: 10px 30px;
+    background: #3988ff;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    position: absolute;
+    bottom: -65%;
+    right: 45%;
+}
