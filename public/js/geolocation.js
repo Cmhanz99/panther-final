@@ -1,6 +1,6 @@
 // Prevent auto-refresh if there's an error
-window.addEventListener('error', function(e) {
-    console.error('JavaScript error:', e.message);
+window.addEventListener("error", function (e) {
+    console.error("JavaScript error:", e.message);
     e.preventDefault();
     return true;
 });
@@ -19,16 +19,16 @@ const mapSettings = {
     // The starting location for test mode
     testLocation: {
         latitude: 10.315,
-        longitude: 123.9175
+        longitude: 123.9175,
     },
 
     // The boundaries of your map area - used to calculate positions
     mapArea: {
-        south: 10.310,  // Minimum latitude
-        north: 10.320,  // Maximum latitude
-        west: 123.910,  // Minimum longitude
-        east: 123.925   // Maximum longitude
-    }
+        south: 10.31, // Minimum latitude
+        north: 10.32, // Maximum latitude
+        west: 123.91, // Minimum longitude
+        east: 123.925, // Maximum longitude
+    },
 };
 
 // ====== PROPERTY DATABASE ======
@@ -86,8 +86,10 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
     // Haversine formula calculation
     const a =
         Math.sin(latDiff / 2) * Math.sin(latDiff / 2) +
-        Math.cos(lat1Rad) * Math.cos(lat2Rad) *
-        Math.sin(lonDiff / 2) * Math.sin(lonDiff / 2);
+        Math.cos(lat1Rad) *
+            Math.cos(lat2Rad) *
+            Math.sin(lonDiff / 2) *
+            Math.sin(lonDiff / 2);
 
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
@@ -120,18 +122,22 @@ function convertCoordsToPosition(latitude, longitude) {
 
     // Calculate percentage position within the map (0-100%)
     // Note: We invert the latitude (100 - ...) because 0% is at the top of the screen
-    const topPercent = 100 - (((latitude - area.south) / latitudeRange) * 100);
+    const topPercent = 100 - ((latitude - area.south) / latitudeRange) * 100;
     const leftPercent = ((longitude - area.west) / longitudeRange) * 100;
 
     // Ensure percentages stay within 0-100% range
     const clampedTop = Math.max(0, Math.min(100, topPercent));
     const clampedLeft = Math.max(0, Math.min(100, leftPercent));
 
-    debugLog(`Converted ${latitude}, ${longitude} to map position: top ${clampedTop.toFixed(2)}%, left ${clampedLeft.toFixed(2)}%`);
+    debugLog(
+        `Converted ${latitude}, ${longitude} to map position: top ${clampedTop.toFixed(
+            2
+        )}%, left ${clampedLeft.toFixed(2)}%`
+    );
 
     return {
         top: clampedTop,
-        left: clampedLeft
+        left: clampedLeft,
     };
 }
 
@@ -143,7 +149,11 @@ function convertCoordsToPosition(latitude, longitude) {
  * @param {number} longitude - User's current longitude
  */
 function updateUserMarker(latitude, longitude) {
-    debugLog(`Updating user marker to: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
+    debugLog(
+        `Updating user marker to: ${latitude.toFixed(6)}, ${longitude.toFixed(
+            6
+        )}`
+    );
 
     // Find the user marker element
     const userMarker = document.getElementById("user-location");
@@ -161,10 +171,10 @@ function updateUserMarker(latitude, longitude) {
     userMarker.style.left = `${position.left}%`;
 
     // Make sure the marker is visible and properly styled
-    userMarker.style.position = 'absolute';
-    userMarker.style.zIndex = '100';
-    userMarker.style.transform = 'translate(-50%, -50%)';
-    userMarker.style.display = 'flex';
+    userMarker.style.position = "absolute";
+    userMarker.style.zIndex = "100";
+    userMarker.style.transform = "translate(-50%, -50%)";
+    userMarker.style.display = "flex";
 
     // Update the debug panel if it exists
     updateDebugPanel(latitude, longitude);
@@ -176,12 +186,12 @@ function updateUserMarker(latitude, longitude) {
 function centerUserMarker() {
     const userMarker = document.getElementById("user-location");
     if (userMarker) {
-        userMarker.style.top = '50%';
-        userMarker.style.left = '50%';
-        userMarker.style.position = 'absolute';
-        userMarker.style.zIndex = '100';
-        userMarker.style.transform = 'translate(-50%, -50%)';
-        userMarker.style.display = 'flex';
+        userMarker.style.top = "50%";
+        userMarker.style.left = "50%";
+        userMarker.style.position = "absolute";
+        userMarker.style.zIndex = "100";
+        userMarker.style.transform = "translate(-50%, -50%)";
+        userMarker.style.display = "flex";
         debugLog("User marker centered on map");
     }
 }
@@ -192,7 +202,11 @@ function centerUserMarker() {
  * @param {number} userLon - User's current longitude
  */
 function checkNearbyProperties(userLat, userLon) {
-    debugLog(`Checking for properties near ${userLat.toFixed(6)}, ${userLon.toFixed(6)}`);
+    debugLog(
+        `Checking for properties near ${userLat.toFixed(6)}, ${userLon.toFixed(
+            6
+        )}`
+    );
 
     let closestProperty = null;
     let shortestDistance = Infinity;
@@ -209,7 +223,10 @@ function checkNearbyProperties(userLat, userLon) {
         debugLog(`Distance to ${property.name}: ${distance.toFixed(0)} meters`);
 
         // If this property is within range and closer than any previous property
-        if (distance <= mapSettings.nearbyDistance && distance < shortestDistance) {
+        if (
+            distance <= mapSettings.nearbyDistance &&
+            distance < shortestDistance
+        ) {
             closestProperty = property;
             shortestDistance = distance;
         }
@@ -217,7 +234,11 @@ function checkNearbyProperties(userLat, userLon) {
 
     // If we found a nearby property, show its popup
     if (closestProperty) {
-        debugLog(`Closest property is ${closestProperty.name} at ${shortestDistance.toFixed(0)} meters`);
+        debugLog(
+            `Closest property is ${
+                closestProperty.name
+            } at ${shortestDistance.toFixed(0)} meters`
+        );
         updatePropertyPopup(closestProperty, shortestDistance);
         showPropertyAlert(closestProperty, shortestDistance);
     } else {
@@ -243,15 +264,18 @@ function updatePropertyPopup(property, distance) {
     }
 
     // Position the popup near the property
-    const position = convertCoordsToPosition(property.latitude, property.longitude);
+    const position = convertCoordsToPosition(
+        property.latitude,
+        property.longitude
+    );
 
     popup.style.top = `${position.top}%`;
     popup.style.left = `${position.left}%`;
-    popup.style.position = 'absolute';
-    popup.style.zIndex = '1000';
+    popup.style.position = "absolute";
+    popup.style.zIndex = "1000";
 
     // Position popup above the property marker
-    popup.style.transform = 'translate(-50%, -120%)';
+    popup.style.transform = "translate(-50%, -120%)";
 
     // Make the popup visible
     popup.style.display = "block";
@@ -260,14 +284,14 @@ function updatePropertyPopup(property, distance) {
     const imgElement = document.getElementById("popupImage");
     if (imgElement) {
         // Use the property image, handling both relative and absolute paths
-        const imagePath = property.image.includes('/')
+        const imagePath = property.image.includes("/")
             ? property.image
             : `{{ asset('images/${property.image}') }}`;
 
         imgElement.src = imagePath;
 
         // Add error handling for images
-        imgElement.onerror = function() {
+        imgElement.onerror = function () {
             this.src = '{{ asset("images/placeholder.jpg") }}';
             debugLog(`Image failed to load: ${property.image}`);
         };
@@ -275,11 +299,15 @@ function updatePropertyPopup(property, distance) {
 
     // Update the text content
     document.getElementById("popupTitle").textContent = property.name;
-    document.getElementById("popupDetails").textContent = `${property.price} | ${property.details}`;
+    document.getElementById(
+        "popupDetails"
+    ).textContent = `${property.price} | ${property.details}`;
 
     // Show distance in miles (1609 meters = 1 mile)
     const distanceInMiles = (distance / 1609).toFixed(1);
-    document.getElementById("popupDistance").textContent = `${distanceInMiles} miles away`;
+    document.getElementById(
+        "popupDistance"
+    ).textContent = `${distanceInMiles} miles away`;
 
     debugLog(`Showing popup for ${property.name}`);
 }
@@ -300,39 +328,40 @@ function hidePropertyPopup() {
  * @param {number} distance - Distance to the property in meters
  */
 function showPropertyAlert(property, distance) {
-    const alertElement = document.getElementById('property-alert');
+    const alertElement = document.getElementById("property-alert");
     if (!alertElement) {
         return;
     }
 
     // Update alert content with property information
-    const alertTitle = alertElement.querySelector('h4');
-    const propertyName = alertElement.querySelector('p strong');
-    const distanceText = alertElement.querySelector('p:last-of-type');
-    const priceElement = alertElement.querySelector('.alert-price');
+    const alertTitle = alertElement.querySelector("h4");
+    const propertyName = alertElement.querySelector("p strong");
+    const distanceText = alertElement.querySelector("p:last-of-type");
+    const priceElement = alertElement.querySelector(".alert-price");
 
     if (alertTitle) alertTitle.textContent = "Property Nearby!";
     if (propertyName) propertyName.textContent = property.name;
 
     // Show distance in miles
     const distanceInMiles = (distance / 1609).toFixed(1);
-    if (distanceText) distanceText.textContent = `${distanceInMiles} miles from your current location`;
+    if (distanceText)
+        distanceText.textContent = `${distanceInMiles} miles from your current location`;
 
     if (priceElement) priceElement.textContent = property.price;
 
     // Show the alert
-    alertElement.style.display = 'block';
+    alertElement.style.display = "block";
 
     // Hide alert after 5 seconds
     setTimeout(() => {
-        alertElement.style.display = 'none';
+        alertElement.style.display = "none";
     }, 5000);
 
     // Add click event to close button
-    const closeBtn = alertElement.querySelector('.close-btn');
+    const closeBtn = alertElement.querySelector(".close-btn");
     if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-            alertElement.style.display = 'none';
+        closeBtn.addEventListener("click", () => {
+            alertElement.style.display = "none";
         });
     }
 
@@ -355,37 +384,44 @@ function createPropertyMarkers() {
     }
 
     // Remove any existing property markers before adding new ones
-    const existingMarkers = document.querySelectorAll('.property-marker');
-    existingMarkers.forEach(marker => marker.remove());
+    const existingMarkers = document.querySelectorAll(".property-marker");
+    existingMarkers.forEach((marker) => marker.remove());
 
     // Add a marker for each property
     propertyList.forEach((property) => {
         // Convert coordinates to map position
-        const position = convertCoordsToPosition(property.latitude, property.longitude);
+        const position = convertCoordsToPosition(
+            property.latitude,
+            property.longitude
+        );
 
         // Create a div element for the marker
-        const markerElement = document.createElement('div');
-        markerElement.className = 'property-marker';
+        const markerElement = document.createElement("div");
+        markerElement.className = "property-marker";
 
         // Position the marker
         markerElement.style.top = `${position.top}%`;
         markerElement.style.left = `${position.left}%`;
-        markerElement.style.position = 'absolute';
-        markerElement.style.transform = 'translate(-50%, -50%)';
-        markerElement.style.zIndex = '50';
+        markerElement.style.position = "absolute";
+        markerElement.style.transform = "translate(-50%, -50%)";
+        markerElement.style.zIndex = "50";
 
         // Determine property type based on price
-        const isCommercial = property.price.includes('1,200,000') || property.price.includes('1.2M');
+        const isCommercial =
+            property.price.includes("1,200,000") ||
+            property.price.includes("1.2M");
 
         // Add the marker content
         markerElement.innerHTML = `
-            <div class="marker ${isCommercial ? 'commercial' : 'residential'}">
-                <span>${property.price.replace('$', '').replace(',000', 'K')}</span>
+            <div class="marker ${isCommercial ? "commercial" : "residential"}">
+                <span>${property.price
+                    .replace("$", "")
+                    .replace(",000", "K")}</span>
             </div>
         `;
 
         // Add click event to show the property details
-        markerElement.addEventListener('click', () => {
+        markerElement.addEventListener("click", () => {
             // Get current user location
             let userLat, userLon;
 
@@ -401,8 +437,10 @@ function createPropertyMarkers() {
 
             // Calculate distance to this property
             const distance = calculateDistance(
-                userLat, userLon,
-                property.latitude, property.longitude
+                userLat,
+                userLon,
+                property.latitude,
+                property.longitude
             );
 
             // Show the property popup
@@ -426,13 +464,13 @@ function createDebugPanel() {
     if (!mapSettings.showDebugInfo) return;
 
     // Check if panel already exists
-    if (document.getElementById('map-debug-panel')) return;
+    if (document.getElementById("map-debug-panel")) return;
 
     debugLog("Creating debug panel");
 
     // Create the debug panel element
-    const panel = document.createElement('div');
-    panel.id = 'map-debug-panel';
+    const panel = document.createElement("div");
+    panel.id = "map-debug-panel";
     panel.style.cssText = `
         position: absolute;
         top: 10px;
@@ -461,16 +499,24 @@ function createDebugPanel() {
             </div>
 
             <div style="margin-bottom: 10px;">
-                <label for="distance-slider">Detection Radius: <span id="distance-value">${mapSettings.nearbyDistance}m</span></label>
-                <input type="range" id="distance-slider" min="100" max="1000" step="100" value="${mapSettings.nearbyDistance}" style="width: 100%;">
+                <label for="distance-slider">Detection Radius: <span id="distance-value">${
+                    mapSettings.nearbyDistance
+                }m</span></label>
+                <input type="range" id="distance-slider" min="100" max="1000" step="100" value="${
+                    mapSettings.nearbyDistance
+                }" style="width: 100%;">
             </div>
 
             <div style="margin-bottom: 10px;">
                 <label for="test-mode-toggle">Test Mode:</label>
-                <input type="checkbox" id="test-mode-toggle" ${mapSettings.useTestMode ? 'checked' : ''}>
+                <input type="checkbox" id="test-mode-toggle" ${
+                    mapSettings.useTestMode ? "checked" : ""
+                }>
             </div>
 
-            <div id="test-controls" style="margin-bottom: 10px; ${mapSettings.useTestMode ? '' : 'display: none;'}">
+            <div id="test-controls" style="margin-bottom: 10px; ${
+                mapSettings.useTestMode ? "" : "display: none;"
+            }">
                 <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
                     <button class="test-btn" data-dir="nw">↖</button>
                     <button class="test-btn" data-dir="n">↑</button>
@@ -496,7 +542,7 @@ function createDebugPanel() {
     `;
 
     // Add the panel to the map
-    const mapContainer = document.querySelector('.map-placeholder');
+    const mapContainer = document.querySelector(".map-placeholder");
     if (mapContainer) {
         mapContainer.appendChild(panel);
         setupDebugControls();
@@ -510,25 +556,25 @@ function setupDebugControls() {
     debugLog("Setting up debug controls");
 
     // Toggle panel visibility
-    const toggleBtn = document.getElementById('toggle-debug');
-    const content = document.getElementById('debug-content');
+    const toggleBtn = document.getElementById("toggle-debug");
+    const content = document.getElementById("debug-content");
     if (toggleBtn && content) {
-        toggleBtn.addEventListener('click', function() {
-            if (content.style.display === 'none') {
-                content.style.display = 'block';
-                toggleBtn.textContent = 'Hide';
+        toggleBtn.addEventListener("click", function () {
+            if (content.style.display === "none") {
+                content.style.display = "block";
+                toggleBtn.textContent = "Hide";
             } else {
-                content.style.display = 'none';
-                toggleBtn.textContent = 'Show';
+                content.style.display = "none";
+                toggleBtn.textContent = "Show";
             }
         });
     }
 
     // Detection distance slider
-    const slider = document.getElementById('distance-slider');
-    const distanceValue = document.getElementById('distance-value');
+    const slider = document.getElementById("distance-slider");
+    const distanceValue = document.getElementById("distance-value");
     if (slider && distanceValue) {
-        slider.addEventListener('input', function() {
+        slider.addEventListener("input", function () {
             const value = parseInt(this.value);
             mapSettings.nearbyDistance = value;
             distanceValue.textContent = `${value}m`;
@@ -546,14 +592,14 @@ function setupDebugControls() {
     }
 
     // Test mode toggle
-    const testToggle = document.getElementById('test-mode-toggle');
-    const testControls = document.getElementById('test-controls');
+    const testToggle = document.getElementById("test-mode-toggle");
+    const testControls = document.getElementById("test-controls");
     if (testToggle && testControls) {
-        testToggle.addEventListener('change', function() {
+        testToggle.addEventListener("change", function () {
             mapSettings.useTestMode = this.checked;
-            testControls.style.display = this.checked ? 'block' : 'none';
+            testControls.style.display = this.checked ? "block" : "none";
 
-            debugLog(`Test mode ${this.checked ? 'enabled' : 'disabled'}`);
+            debugLog(`Test mode ${this.checked ? "enabled" : "disabled"}`);
 
             // If toggling to test mode, update with test location
             if (this.checked) {
@@ -575,7 +621,7 @@ function setupDebugControls() {
                         // Store current position
                         window.currentUserLocation = {
                             latitude: userLat,
-                            longitude: userLon
+                            longitude: userLon,
                         };
 
                         updateUserMarker(userLat, userLon);
@@ -592,19 +638,19 @@ function setupDebugControls() {
     }
 
     // Debug mode toggle
-    const debugToggle = document.getElementById('debug-mode-toggle');
+    const debugToggle = document.getElementById("debug-mode-toggle");
     if (debugToggle) {
-        debugToggle.addEventListener('change', function() {
+        debugToggle.addEventListener("change", function () {
             mapSettings.showDebugInfo = this.checked;
-            debugLog(`Debug mode ${this.checked ? 'enabled' : 'disabled'}`);
+            debugLog(`Debug mode ${this.checked ? "enabled" : "disabled"}`);
         });
     }
 
     // Movement buttons for test mode
-    const testButtons = document.querySelectorAll('.test-btn');
-    testButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const direction = this.getAttribute('data-dir');
+    const testButtons = document.querySelectorAll(".test-btn");
+    testButtons.forEach((btn) => {
+        btn.addEventListener("click", function () {
+            const direction = this.getAttribute("data-dir");
             moveTestLocation(direction);
         });
     });
@@ -622,39 +668,41 @@ function moveTestLocation(direction) {
     const location = mapSettings.testLocation;
 
     // Update coordinates based on direction
-    switch(direction) {
-        case 'n':
+    switch (direction) {
+        case "n":
             location.latitude += step;
             break;
-        case 's':
+        case "s":
             location.latitude -= step;
             break;
-        case 'e':
+        case "e":
             location.longitude += step;
             break;
-        case 'w':
+        case "w":
             location.longitude -= step;
             break;
-        case 'ne':
+        case "ne":
             location.latitude += step;
             location.longitude += step;
             break;
-        case 'nw':
+        case "nw":
             location.latitude += step;
             location.longitude -= step;
             break;
-        case 'se':
+        case "se":
             location.latitude -= step;
             location.longitude += step;
             break;
-        case 'sw':
+        case "sw":
             location.latitude -= step;
             location.longitude -= step;
             break;
-        case 'center':
+        case "center":
             // Reset to center of map bounds
-            location.latitude = (mapSettings.mapArea.north + mapSettings.mapArea.south) / 2;
-            location.longitude = (mapSettings.mapArea.east + mapSettings.mapArea.west) / 2;
+            location.latitude =
+                (mapSettings.mapArea.north + mapSettings.mapArea.south) / 2;
+            location.longitude =
+                (mapSettings.mapArea.east + mapSettings.mapArea.west) / 2;
             break;
     }
 
@@ -675,7 +723,11 @@ function moveTestLocation(direction) {
     // Check for nearby properties
     checkNearbyProperties(location.latitude, location.longitude);
 
-    debugLog(`Test location moved to ${location.latitude.toFixed(6)}, ${location.longitude.toFixed(6)}`);
+    debugLog(
+        `Test location moved to ${location.latitude.toFixed(
+            6
+        )}, ${location.longitude.toFixed(6)}`
+    );
 }
 
 /**
@@ -684,8 +736,8 @@ function moveTestLocation(direction) {
  * @param {number} lon - Current longitude
  */
 function updateDebugPanel(lat, lon) {
-    const latElement = document.getElementById('debug-lat');
-    const lonElement = document.getElementById('debug-lon');
+    const latElement = document.getElementById("debug-lat");
+    const lonElement = document.getElementById("debug-lon");
 
     if (latElement && lonElement) {
         latElement.textContent = `Lat: ${lat.toFixed(6)}`;
@@ -716,14 +768,18 @@ function startWatchingLocation() {
                 // Store the position for reference
                 window.currentUserLocation = {
                     latitude: userLat,
-                    longitude: userLon
+                    longitude: userLon,
                 };
 
                 // Update user marker and check for nearby properties
                 updateUserMarker(userLat, userLon);
                 checkNearbyProperties(userLat, userLon);
 
-                debugLog(`Real position updated: ${userLat.toFixed(6)}, ${userLon.toFixed(6)}`);
+                debugLog(
+                    `Real position updated: ${userLat.toFixed(
+                        6
+                    )}, ${userLon.toFixed(6)}`
+                );
             },
             (error) => {
                 console.error("Geolocation error:", error);
@@ -731,7 +787,7 @@ function startWatchingLocation() {
             {
                 enableHighAccuracy: true,
                 maximumAge: 10000,
-                timeout: 5000
+                timeout: 5000,
             }
         );
 
@@ -780,26 +836,32 @@ function initializeMap() {
     }
 
     // Add click handler to close popup when clicking on map
-    const mapPlaceholder = document.querySelector('.map-placeholder');
+    const mapPlaceholder = document.querySelector(".map-placeholder");
     if (mapPlaceholder) {
-        mapPlaceholder.addEventListener('click', function(e) {
+        mapPlaceholder.addEventListener("click", function (e) {
             // Only close if not clicking on a marker, popup, or debug panel
-            if (!e.target.closest('.property-marker') &&
-                !e.target.closest('.map-popup') &&
-                !e.target.closest('#map-debug-panel')) {
+            if (
+                !e.target.closest(".property-marker") &&
+                !e.target.closest(".map-popup") &&
+                !e.target.closest("#map-debug-panel")
+            ) {
                 hidePropertyPopup();
             }
         });
     }
 
     // Add click handler for "Center on My Location" button
-    const centerBtn = document.querySelector('button[title="Center on My Location"]');
+    const centerBtn = document.querySelector(
+        'button[title="Center on My Location"]'
+    );
     if (centerBtn) {
-        centerBtn.addEventListener('click', function() {
+        centerBtn.addEventListener("click", function () {
             if (mapSettings.useTestMode) {
                 // Reset test location to center
-                mapSettings.testLocation.latitude = (mapSettings.mapArea.north + mapSettings.mapArea.south) / 2;
-                mapSettings.testLocation.longitude = (mapSettings.mapArea.east + mapSettings.mapArea.west) / 2;
+                mapSettings.testLocation.latitude =
+                    (mapSettings.mapArea.north + mapSettings.mapArea.south) / 2;
+                mapSettings.testLocation.longitude =
+                    (mapSettings.mapArea.east + mapSettings.mapArea.west) / 2;
 
                 updateUserMarker(
                     mapSettings.testLocation.latitude,
@@ -821,7 +883,7 @@ function initializeMap() {
                         // Store current position
                         window.currentUserLocation = {
                             latitude: userLat,
-                            longitude: userLon
+                            longitude: userLon,
                         };
 
                         updateUserMarker(userLat, userLon);
@@ -831,7 +893,9 @@ function initializeMap() {
                     },
                     (error) => {
                         console.error("Geolocation error:", error);
-                        alert("Could not get your location. Please check your permission settings.");
+                        alert(
+                            "Could not get your location. Please check your permission settings."
+                        );
                     }
                 );
             } else {
@@ -841,13 +905,13 @@ function initializeMap() {
     }
 
     // Set up "Enable Location" button in the hero section
-    const enableLocationBtn = document.getElementById('enable-location');
+    const enableLocationBtn = document.getElementById("enable-location");
     if (enableLocationBtn) {
-        enableLocationBtn.addEventListener('click', function() {
+        enableLocationBtn.addEventListener("click", function () {
             if (mapSettings.useTestMode) {
                 // In test mode, just scroll to the map
-                document.getElementById('map').scrollIntoView({
-                    behavior: 'smooth'
+                document.getElementById("map").scrollIntoView({
+                    behavior: "smooth",
                 });
 
                 debugLog("Scrolled to map section (test mode)");
@@ -856,58 +920,65 @@ function initializeMap() {
                     (position) => {
                         const userLat = position.coords.latitude;
                         const userLon = position.coords.longitude;
-     // Store current position
-     window.currentUserLocation = {
-        latitude: userLat,
-        longitude: userLon
-    };
+                        // Store current position
+                        window.currentUserLocation = {
+                            latitude: userLat,
+                            longitude: userLon,
+                        };
 
-    // Update user marker on the map
-    updateUserMarker(userLat, userLon);
+                        // Update user marker on the map
+                        updateUserMarker(userLat, userLon);
 
-    // Check for nearby properties
-    checkNearbyProperties(userLat, userLon);
+                        // Check for nearby properties
+                        checkNearbyProperties(userLat, userLon);
 
-    // Update location status text
-    const locationStatus = document.querySelector('.location-status span');
-    if (locationStatus) {
-        locationStatus.textContent = "Your Current Location";
+                        // Update location status text
+                        const locationStatus = document.querySelector(
+                            ".location-status span"
+                        );
+                        if (locationStatus) {
+                            locationStatus.textContent =
+                                "Your Current Location";
+                        }
+
+                        // Scroll to the map section
+                        document.getElementById("map").scrollIntoView({
+                            behavior: "smooth",
+                        });
+
+                        // Show success message
+                        alert(
+                            "Location services enabled! You can now see properties near your location."
+                        );
+                    },
+                    (error) => {
+                        console.error("Geolocation error:", error);
+                        alert(
+                            "Could not get your location. Please check your permission settings."
+                        );
+                    }
+                );
+            } else {
+                alert("Geolocation is not supported by your browser.");
+            }
+        });
     }
 
-    // Scroll to the map section
-    document.getElementById('map').scrollIntoView({
-        behavior: 'smooth'
-    });
+    // Add CSS styles for the debug panel buttons
+    addDebugStyles();
 
-    // Show success message
-    alert("Location services enabled! You can now see properties near your location.");
-},
-(error) => {
-    console.error("Geolocation error:", error);
-    alert("Could not get your location. Please check your permission settings.");
-}
-);
-} else {
-alert("Geolocation is not supported by your browser.");
-}
-});
-}
-
-// Add CSS styles for the debug panel buttons
-addDebugStyles();
-
-debugLog("Map initialization complete");
+    debugLog("Map initialization complete");
 }
 
 /**
-* Adds CSS styles for the debug panel and buttons
-*/
+ * Adds CSS styles for the debug panel and buttons
+ */
 function addDebugStyles() {
-// Create a style element
-const styleElement = document.createElement('style');
+    // Create a style element
+    const styleElement = document.createElement("style");
 
-// Add CSS rules for debug panel elements
-styleElement.textContent = `
+    // Add CSS rules for debug panel elements
+    styleElement.textContent = `
 .test-btn {
 background: #555;
 border: none;
@@ -1000,15 +1071,14 @@ opacity: 0;
 }
 `;
 
-// Add the style element to the document head
-document.head.appendChild(styleElement);
+    // Add the style element to the document head
+    document.head.appendChild(styleElement);
 
-debugLog("Debug styles added");
+    debugLog("Debug styles added");
 }
 
 // Start the map when the DOM is fully loaded
-document.addEventListener('DOMContentLoaded', function() {
-debugLog("DOM loaded, initializing map...");
-initializeMap();
+document.addEventListener("DOMContentLoaded", function () {
+    debugLog("DOM loaded, initializing map...");
+    initializeMap();
 });
-
