@@ -16,10 +16,9 @@
     <!-- Header -->
     @yield('content')
 
-    <!-- Include the geolocation script -->
-    <script src="{{ asset('js/geolocation.js') }}"></script>
-    <script src="{{ asset('js/useFilter.js') }}"></script>
-    <script src="{{ asset('js/zoom.js') }}"></script>
+    <script src="{{asset ('js/geolocation.js')}}"></script>
+    <script src="{{asset ('js/userFilter.js')}}"></script>
+    <script src="{{asset ('js/zoom.js')}}"></script>
 </body>
 
 </html>
